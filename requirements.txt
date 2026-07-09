@@ -1,0 +1,12 @@
+# 直接依赖锁（精确版本，供可复现安装）：
+#     pip install -r requirements.txt
+#
+# 这里只钉「直接依赖」，用于避免 6 个月后 `pip install -e .` 拉到不同的 openai SDK
+# 等大版本漂移。pyproject.toml 里是带上界的区间约束（日常安装用）；本文件是快照锁。
+# 需要含「传递依赖」的全量 lock 时，后续可上 uv（`uv pip compile`）或 pip-tools。
+# 版本对应 2026-07-02 验证通过的环境（Python 3.12）。
+openai==2.43.0
+python-dotenv==1.2.2
+pydantic==2.13.4
+tree-sitter==0.25.2
+tree-sitter-language-pack==1.12.0

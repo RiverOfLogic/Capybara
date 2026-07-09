@@ -1,0 +1,20 @@
+{
+  "name": "capybara-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Capybara 交互式终端 UI 前端（Ink + React，声明式组件）。由 Python 端 `capybara`（无参数）拉起，通过 stdio JSON-lines 协议与 agents.tui_backend 通信。",
+  "bin": {
+    "capybara-ui": "index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "htm": "^3.1.1",
+    "ink": "^5.0.1",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "react": "^18.3.1"
+  }
+}

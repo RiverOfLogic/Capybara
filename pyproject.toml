@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "capybara"
+version = "0.1.0"
+description = "从零搭建的 Python 编程 Agent：读代码、改代码、跑验证，支持多轮记忆、异步流式、trace、稳健性与子 Agent 编排。"
+requires-python = ">=3.11"
+# 版本区间：都带上界，防止大版本破坏性升级把安装拉飘（尤其 openai SDK）。
+# 精确复现见根目录 requirements.txt（`pip install -r requirements.txt`）。
+# tree-sitter / tree-sitter-language-pack 现为主依赖 → 代码智能（find_references /
+# repo_map / get_file_relations）默认可用（满血默认）。ctags 是外部二进制、非 pip 依赖，
+# 仍需单独安装（启动期探测会在缺失时给中文提示）。
+dependencies = [
+    "openai>=2,<3",
+    "python-dotenv>=1,<2",
+    "pydantic>=2,<3",
+    "tree-sitter>=0.25,<0.26",
+    "tree-sitter-language-pack>=1.10,<2",
+]
+
+[project.scripts]
+capybara = "agents.__main__:main"
+
+[tool.setuptools]
+packages = ["core", "tools", "tools.code_intel", "agents"]

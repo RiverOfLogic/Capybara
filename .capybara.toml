@@ -1,0 +1,111 @@
+# ============================================================================
+# Capybara 项目级配置（.capybara.toml）—— 单一配置来源
+# ----------------------------------------------------------------------------
+# · 字段名 = core/config.py 里 Config 的字段名。
+# · CLI（capybara / python -m agents）自动探测 <workspace>/.capybara.toml；
+#   也可 `--config <path>` 显式指定。未找到则用内置默认值。
+# · 下方几乎所有项都注释掉了，表示"用默认值"；要覆盖某项就取消该行注释并改值。
+#   未知字段会被 pydantic 静默忽略（不会因为多写一行而报错）。
+# ============================================================================
+
+# ── 代码智能（ctags 单一配置来源）────────────────────────────────────────────
+# ctags 可执行文件路径。留空则查系统 PATH 上的 "ctags"。
+# 这是配置 ctags 的唯一地方（不再读环境变量）；想全局可用就把 ctags 加进系统 PATH。
+ctags_path = "E:\\code\\agent\\ctags-p6.2.20260628.0-x86\\ctags.exe"
+# code_index_dir = ".agent"          # 索引产物目录（tags / index.db），相对工作区根
+
+# ── LLM ─────────────────────────────────────────────────────────────────────
+# default_model = "deepseek-v4-flash"
+# default_provider = "deepseek"
+# temperature = 0.7
+# max_tokens =  1000000                     # 留空 = 不限（Optional）
+# 说明：实际连接的模型/密钥/地址由 .env 的 LLM_MODEL_ID / LLM_API_KEY / LLM_BASE_URL 决定。
+
+# ── 系统 / 历史 ──────────────────────────────────────────────────────────────
+# debug = false
+# log_level = "INFO"
+# max_history_length = 100
+
+# ── 上下文工程（跨轮历史压缩）────────────────────────────────────────────────
+# context_window = 1000000            # 上下文窗口大小（tokens）
+# compression_threshold = 0.8        # 压缩阈值（0.8 = 到 80% 触发）
+# min_retain_rounds = 6             # 压缩时保留的最小完整轮次数
+# enable_smart_compression = true   # 是否启用智能摘要（需额外 LLM 调用）
+
+# ── 单任务内压缩（ReAct 循环内 assistant+tool 分组，见 P1-4）──────────────────
+# run_compaction_token_threshold =   # 触发压缩的绝对 token 阈值；留空取 context_window*compression_threshold
+# run_compaction_keep_recent_groups = 6   # 压缩时保留最近多少个 assistant+tool 分组不折叠
+
+# ── 智能摘要专用 LLM ─────────────────────────────────────────────────────────
+# summary_llm_provider = "deepseek"
+# summary_llm_model = "deepseek-v4-flash"
+# summary_max_tokens = 800
+# summary_temperature = 0.3
+
+# ── 验证—修复闭环 ────────────────────────────────────────────────────────────
+# max_fix_iters = 3                  # verify_command 失败时自动回灌修复的最大轮数
+
+# ── 工具输出截断 ─────────────────────────────────────────────────────────────
+# tool_output_max_lines = 2000
+# tool_output_max_bytes = 51200      # 50KB
+# tool_output_dir = "tool-output"
+# tool_output_truncate_direction = "head"   # head / tail / head_tail
+
+# ── 可观测性（trace）─────────────────────────────────────────────────────────
+# trace_enabled = true
+# trace_dir = "memory/traces"
+# trace_sanitize = true
+# trace_html_include_raw_response = true
+
+# ── Skills 知识外化 ──────────────────────────────────────────────────────────
+# skills_enabled = true
+# skills_dir = "skills"
+# skills_auto_register = true
+
+# ── 熔断器 ───────────────────────────────────────────────────────────────────
+# circuit_enabled = true
+# circuit_failure_threshold = 3
+# circuit_recovery_timeout = 300     # 秒
+
+# ── 会话持久化 ───────────────────────────────────────────────────────────────
+# session_enabled = true
+# session_dir = "memory/sessions"
+# auto_save_enabled = false
+# auto_save_interval = 10            # 每 N 条消息保存一次
+
+# ── 子代理 ───────────────────────────────────────────────────────────────────
+# subagent_enabled = true
+# subagent_max_steps = 15
+# subagent_use_light_llm = false
+# subagent_light_llm_provider = "deepseek"
+# subagent_light_llm_model = "deepseek-v4-flash"
+
+# ── 生产力工具 ───────────────────────────────────────────────────────────────
+# todowrite_enabled = true
+# todowrite_persistence_dir = "memory/todos"
+# devlog_enabled = true
+# devlog_persistence_dir = "memory/devlogs"
+
+# ── 异步生命周期 ─────────────────────────────────────────────────────────────
+# async_enabled = true
+# max_concurrent_tools = 3
+# hook_timeout_seconds = 5.0
+# llm_async_timeout = 120            # 秒
+# tool_async_timeout = 30            # 秒
+
+# ── 流式输出 ─────────────────────────────────────────────────────────────────
+# stream_enabled = true
+# stream_buffer_size = 100
+# stream_include_thinking = true
+# stream_include_tool_calls = true
+
+# ── MCP servers（可选，作为客户端连接的外部 server；数组表，可写多个）──────────
+# 统一在这里配 MCP（不必再在代码里传 mcp_servers=[...]）。每个 [[mcp_servers]] 一个 server：
+# [[mcp_servers]]
+# name = "example"                   # 显示名 / 工具前缀来源
+# command = "python"                 # 启动命令
+# args = ["demo/example_mcp_server.py"]
+# # env = { SOME_KEY = "value" }     # 可选，注入子进程环境变量
+# # cwd = "."                        # 可选，工作目录
+# # timeout = 30                     # 可选，握手/调用超时（秒）
+# # prefix = "example__"             # 可选，注册名前缀（避免与内置/其它 server 重名）

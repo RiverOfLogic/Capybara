@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 代码智能索引产物（派生物，可随时重建）
+.agent/
+
+# 环境与密钥
+.env
+
+# 会话 / trace / 工具输出等运行期产物
+tool-output/
+
+# 打包产物（pyproject.toml / pip install -e .）
+*.egg-info/
+build/
+dist/
+
+# Ink 前端依赖（ui/，可随时 npm install 重建）
+ui/node_modules/
+ui/package-lock.json
